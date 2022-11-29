@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: customer
+  cloud:
+    config:
+      failFast: true
+      retry:
+        initialInterval: 3000
+        multiplier: 1.3
+        maxInterval: 10000
+        maxAttempts: 5
+  config:
+    import: "configserver:http://root:admin@localhost:8888/"
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+    import: "configserver:http://root:admin@config-service:8888/"
