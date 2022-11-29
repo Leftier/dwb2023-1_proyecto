@@ -7,6 +7,7 @@
 FROM maven:3.8.6-openjdk-11-slim AS maven
 WORKDIR application
 COPY customer/pom.xml .
+RUN mvn verify --fail-never # Cache dependencies
 COPY customer/src ./src
 RUN mvn clean package -DskipTests
 
