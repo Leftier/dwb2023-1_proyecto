@@ -1,0 +1,45 @@
+version: '3.4'
+services:
+
+  # Ocupamos una sola instancia de mysql, pero cada
+  # microservicio cuenta con su propia base de datos
+  mysql:
+    image: 'mysql:latest'
+    ports:
+      - '3306:3306'
+    restart: always
+    environment:
+      MYSQL_DATABASE: "dwb2023-1_customer"
+      MYSQL_ROOT_PASSWORD: 'PassW0rd!'
+    volumes:
+      # Copiamos los archivos .sql para ser ejecutados por la imagen de mysql
+      - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+
+  config-service:
+    image: dwb2023-1_config-service
+    build:
+      context: .
+      dockerfile: ./config-service/Dockerfile
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - '8888:8888'
+    restart: always
+
+  customer:
+    image: dwb2023-1_customer
+    build:
+      context: .
+      dockerfile: ./customer/Dockerfile
+    ports:
+      - '8081:8081'
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mysql
+      - config-service
+
+volumes:
+  mysql:
+    driver: local
