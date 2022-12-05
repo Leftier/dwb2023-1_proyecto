@@ -52,6 +52,16 @@ CREATE TABLE customer
 CREATE DATABASE IF NOT EXISTS `dwb2023-1_product`;
 USE `dwb2023-1_product`;
 
+
+DROP TABLE IF EXISTS category;
+
+CREATE TABLE category(
+    category_id INT NOT NULL AUTO_INCREMENT,
+    category VARCHAR(100) UNIQUE NOT NULL,
+    status TINYINT NOT NULL,
+    PRIMARY KEY (category_id)
+);
+
 DROP TABLE IF EXISTS product;
 
 CREATE TABLE product
@@ -66,13 +76,4 @@ CREATE TABLE product
     status      TINYINT             NOT NULL,
     PRIMARY KEY (product_id),
     FOREIGN KEY (category_id) REFERENCES category (category_id)
-);
-
-DROP TABLE IF EXISTS category;
-
-CREATE TABLE category(
-    category_id INT NOT NULL AUTO_INCREMENT,
-    category VARCHAR(100) UNIQUE NOT NULL,
-    status TINYINT NOT NULL,
-    PRIMARY KEY (category_id)
 );
