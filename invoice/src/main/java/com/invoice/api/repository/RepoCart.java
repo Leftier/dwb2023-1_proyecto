@@ -13,17 +13,22 @@ import org.springframework.stereotype.Repository;
 import com.invoice.api.entity.Cart;
 
 @Repository
-public interface RepoCart extends JpaRepository<Cart, Integer>{
+public interface RepoCart extends JpaRepository<Cart, Integer> {
 
     List<Cart> findByRfcAndStatus(String rfc, Integer status);
 
     @Modifying
     @Transactional
-    @Query(value ="UPDATE cart SET status = 0 WHERE cart_id = :cart_id AND status = 1", nativeQuery = true)
+    @Query(value = "UPDATE cart SET status = 0 WHERE cart_id = :cart_id AND status = 1", nativeQuery = true)
     Integer removeFromCart(@Param("cart_id") Integer cart_id);
 
     @Modifying
     @Transactional
-    @Query(value ="UPDATE cart SET status = 0 WHERE rfc = :rfc AND status = 1", nativeQuery = true)
+    @Query(value = "UPDATE cart SET status = 0 WHERE rfc = :rfc AND status = 1", nativeQuery = true)
     Integer clearCart(@Param("rfc") String rfc);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE cart SET quantity = :quantity WHERE cart_id = :cart_id AND status = 1", nativeQuery = true)
+    void updateCartQty(@Param("cart_id") Integer cart_id, @Param("quantity") Integer quantity);
 }
