@@ -43,3 +43,36 @@ CREATE TABLE customer
     FOREIGN KEY (region_id) REFERENCES region (region_id),
     FOREIGN KEY (customer_image_id) REFERENCES customer_image (customer_image_id)
 );
+
+/***************************************************
+ *                                                 *
+ * Creamos tablas para el microservicio de product *
+ *                                                 *
+ ***************************************************/
+CREATE DATABASE IF NOT EXISTS `dwb2023-1_product`;
+USE `dwb2023-1_product`;
+
+DROP TABLE IF EXISTS product;
+
+CREATE TABLE product
+(
+    product_id  INT                 NOT NULL AUTO_INCREMENT,
+    gtin        CHAR(13) UNIQUE     NOT NULL,
+    product     VARCHAR(100) UNIQUE NOT NULL,
+    description VARCHAR(255),
+    price       FLOAT               NOT NULL,
+    stock       INT                 NOT NULL,
+    category_id INT                 NOT NULL,
+    status      TINYINT             NOT NULL,
+    PRIMARY KEY (product_id),
+    FOREIGN KEY (category_id) REFERENCES category (category_id)
+);
+
+DROP TABLE IF EXISTS category;
+
+CREATE TABLE category(
+    category_id INT NOT NULL AUTO_INCREMENT,
+    category VARCHAR(100) UNIQUE NOT NULL,
+    status TINYINT NOT NULL,
+    PRIMARY KEY (category_id)
+);
