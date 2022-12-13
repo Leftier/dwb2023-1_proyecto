@@ -70,9 +70,73 @@ CREATE TABLE product
 
 DROP TABLE IF EXISTS category;
 
-CREATE TABLE category(
-    category_id INT NOT NULL AUTO_INCREMENT,
-    category VARCHAR(100) UNIQUE NOT NULL,
-    status TINYINT NOT NULL,
+CREATE TABLE category
+(
+    category_id INT                 NOT NULL AUTO_INCREMENT,
+    category    VARCHAR(100) UNIQUE NOT NULL,
+    status      TINYINT             NOT NULL,
     PRIMARY KEY (category_id)
+);
+
+DROP TABLE IF EXISTS product_image;
+
+CREATE TABLE product_image
+(
+    product_image_id INT     NOT NULL AUTO_INCREMENT,
+    product_id       INT     NOT NULL,
+    image            TEXT    NOT NULL,
+    status           TINYINT NOT NULL,
+    PRIMARY KEY (product_image_id),
+    FOREIGN KEY (product_id) REFERENCES product (product_id)
+);
+
+/***************************************************
+ *                                                 *
+ * Creamos tablas para el microservicio de invoice *
+ *                                                 *
+ ***************************************************/
+CREATE DATABASE IF NOT EXISTS `dwb2023-1_invoice`;
+USE `dwb2023-1_invoice`;
+
+DROP TABLE IF EXISTS invoice;
+
+CREATE TABLE invoice
+(
+    invoice_id INT         NOT NULL AUTO_INCREMENT,
+    rfc        VARCHAR(13) NOT NULL,
+    subtotal   FLOAT       NOT NULL,
+    taxes      FLOAT       NOT NULL,
+    total      FLOAT       NOT NULL,
+    created_at DATE        NOT NULL,
+    status     TINYINT     NOT NULL,
+    PRIMARY KEY (invoice_id)
+);
+
+DROP TABLE IF EXISTS item;
+
+CREATE TABLE item
+(
+    item_id    INT      NOT NULL AUTO_INCREMENT,
+    invoice_id INT      NOT NULL,
+    gtin       CHAR(13) NOT NULL,
+    quantity   INT      NOT NULL,
+    unit_price FLOAT    NOT NULL,
+    subtotal   FLOAT    NOT NULL,
+    taxes      FLOAT    NOT NULL,
+    total      FLOAT    NOT NULL,
+    status     TINYINT  NOT NULL,
+    PRIMARY KEY (item_id),
+    FOREIGN KEY (invoice_id) REFERENCES invoice (invoice_id)
+);
+
+DROP TABLE IF EXISTS cart;
+
+CREATE TABLE cart
+(
+    cart_id  INT         NOT NULL AUTO_INCREMENT,
+    rfc      VARCHAR(13) NOT NULL,
+    gtin     CHAR(13)    NOT NULL,
+    quantity INT         NOT NULL,
+    status   TINYINT     NOT NULL,
+    PRIMARY KEY (cart_id)
 );
