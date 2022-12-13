@@ -1,6 +1,6 @@
 spring:
   application:
-    name: product
+    name: product-serivce
   cloud:
     config:
       failFast: true
